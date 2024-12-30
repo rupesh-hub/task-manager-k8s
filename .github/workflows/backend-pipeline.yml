@@ -6,7 +6,7 @@ on:
     paths:
       - backend/**
       - docker/backend/**
-      - 'docker-compose.yml'
+      - docker-compose.yml
       - .github/workflows/backend-*.yml
 
 jobs:
@@ -94,9 +94,9 @@ jobs:
 
       - name: Extract project version
         id: extract_version
-        run: | 
+        run: |
           cd backend
-          echo "VERSION=$(./mvnw -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
 
       - name: Login to dockerhub
         uses: docker/login-action@v3
@@ -110,9 +110,7 @@ jobs:
           context: backend
           file: docker/backend/Dockerfile
           push: true
-
           platforms: linux/amd64
-
           tags: ${{ secrets.DOCKER_USERNAME }}/task-manager-backend:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKER_USERNAME }}/task-manager-backend:latest
           build-args: |
             PROFILE=dev
@@ -125,16 +123,14 @@ jobs:
     steps:
       - name: Create deployment folder
         run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
-        
+
       - name: Copy compose file
         run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
 
       - name: Set ENV variable and deploy
         run: |
           ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
-        # export EMAIL_HOSTNAME=${{secrets.EMAIL_HOSTNAME}}
-
-          cd ci-cd
-          docker-compose -f docker-compose.yml pull -q
-          docker-compose -f docker-compose.yml up -d   
+            cd ci-cd
+            docker-compose -f docker-compose.yml pull -q
+            docker-compose -f docker-compose.yml up -d
           EOF
