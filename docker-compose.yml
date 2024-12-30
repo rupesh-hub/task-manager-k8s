@@ -16,27 +16,27 @@ services:
       - custom-network
     restart: unless-stopped
 
-  task-manager:
-    container_name: task-manager
+  task-manager-backend:
+    container_name: task-manager-backend
     image: rupesh1997/task-manager-backend:1.0.0
     ports:
       - 8181:8181
     volumes:
-      - task-manager-storage:/app/uploads
+      - task-manager-backend-storage:/app/uploads
     networks:
       - custom-network
     depends_on:
       - postgres
 
-  task-manager-frontend-service:
-    container_name: frontend-service
+  task-manager-frontend:
+    container_name: task-manager-frontend
     image: rupesh1997/task-manager-frontend:1.0.0
     ports:
       - 8080:80
     networks:
       - custom-network
     depends_on:
-      - task-manager
+      - task-manager-backend
 
 networks:
   custom-network:
@@ -45,7 +45,7 @@ networks:
 volumes:
   postgres:
     driver: local
-  task-manager-storage:
+  task-manager-backend-storage:
     driver: local
 
 #docker-compose -f docker/docker-compose.yml up -d
