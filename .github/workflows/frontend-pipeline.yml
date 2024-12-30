@@ -6,7 +6,7 @@ on:
     paths:
       - frontend/**
       - docker/frontend/**
-      - 'docker-compose.yml'
+      - docker-compose.yml
       - .github/workflows/frontend-*.yml
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
           file: docker/frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKER_USERNAME }}/task-manager-frontend:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKER_USERNAME }}/task-manager-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/task-manager-frontend:${{ steps.project-version.outputs.VERSION }},${{ secrets.DOCKER_USERNAME }}/task-manager-frontend:latest
 
   deploy:
     name: Deploy frontend
@@ -53,11 +53,8 @@ jobs:
 
       - name: Set ENV variable and deploy
         run: |
-               ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
-               cd ci-cd
-               docker-compose -f docker-compose.yml pull -q
-               docker-compose -f docker-compose.yml up -d
-               EOF
-
-
-# sudo apt-get install jq
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
+            cd ci-cd
+            docker-compose -f docker-compose.yml pull -q
+            docker-compose -f docker-compose.yml up -d
+          EOF
