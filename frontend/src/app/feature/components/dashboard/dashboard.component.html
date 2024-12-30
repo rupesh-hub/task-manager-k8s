@@ -1,26 +1,68 @@
-<div class="w-[80vw] h-screen mx-auto flex justify-start items-center">
+<div class="w-[80vw] h-screen mx-auto flex flex-col justify-start items-center space-y-8 py-8">
 
-  <div>
+  <!-- Heading Section -->
+  <div class="text-2xl font-semibold text-gray-800">
     All Tasks
   </div>
 
-  <div>
+  <!-- Add New Task Button -->
+  <div class="w-full flex justify-center">
     <button
-      class="w-full py-3 px-4 bg-purple-600 text-white rounded-md font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400">
+      class="w-64 py-3 px-4 bg-purple-600 text-white rounded-md font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 transition duration-300 ease-in-out"
+      routerLink="/task/create">
       Add New Task
     </button>
   </div>
 
-  <div *ngFor="let task of tasks" class="border-b p-4">
-    <div>
-      {{ task.title }}
-    </div>
-    <div>
-      {{ task.description }}
-    </div>
-    <div>
-      {{ task.dueDate | date:'shortDate' }}
-    </div>
+  <!-- Tasks List -->
+  <div class="w-full space-y-4 ">
+    <ng-container *ngFor="let task of tasks">
+      <div  class="border-b p-4 bg-white shadow-sm rounded-md flex justify-between items-center">
+        <div>
+          <!-- Task Title -->
+          <div class="text-lg font-medium text-gray-900">
+            {{ task.title }}
+          </div>
+
+          <!-- Task Description -->
+          <div class="text-sm text-gray-600">
+            {{ task.description }}
+          </div>
+
+          <!-- Task Due Date -->
+          <div class="text-sm text-gray-500">
+            Due: {{ task.dueDate | date:'medium' }}
+          </div>
+        </div>
+
+        <div class="icons flex justify-center items-center gap-1">
+
+          <!--View Detail Icon-->
+          <button
+            class="w-6 h-6 p-1 rounded-full border flex justify-center items-center"
+            [routerLink]="['/task', task.id]">
+            <i class="fas fa-eye"></i>
+          </button>
+
+          <!-- Edit Task Icon -->
+          <button
+            class="w-6 h-6 p-1 rounded-full border flex justify-center items-center"
+            (click)="editTask(task)">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+
+          <!-- Delete Task Icon -->
+          <button
+            class="w-6 h-6 p-1 rounded-full border flex justify-center items-center"
+            (click)="deleteTask(task.id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </ng-container>
+
   </div>
 
 </div>

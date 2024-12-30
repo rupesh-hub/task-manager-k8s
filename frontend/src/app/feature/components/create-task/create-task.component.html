@@ -1,0 +1,59 @@
+<div class="container w-[80vw] mx-auto h-screen flex justify-center items-center">
+  <form [formGroup]="taskForm" (ngSubmit)="onCreate()" class="bg-purple-50 p-8 rounded-lg md:w-full max-w-xl">
+    <div class="font-serif text-center text-2xl font-semibold text-purple-700 mb-6">
+      Create New Task!
+    </div>
+
+    <!-- Title Field -->
+    <div class="mb-4">
+      <label for="title" class="block text-md text-purple-600 font-medium">Title:</label>
+      <input type="text" id="title" formControlName="title" class="w-full p-3 mt-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-500" />
+      <div *ngIf="taskForm.get('title')?.errors && (taskForm.get('title')?.dirty || taskForm.get('title')?.touched)" class="text-[12px] text-red-600 mt-1">
+        <div *ngIf="taskForm.get('title')?.errors?.['required']" class="font-semibold">* Title is required.</div>
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div class="mb-4">
+      <label for="description" class="block text-md text-purple-600 font-medium">Description:</label>
+      <textarea id="description" formControlName="description" rows="4" class="w-full p-3 mt-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-500"></textarea>
+      <div *ngIf="taskForm.get('description')?.errors && (taskForm.get('description')?.dirty || taskForm.get('description')?.touched)" class="text-[12px] text-red-600 mt-1">
+        <div *ngIf="taskForm.get('description')?.errors?.['required']" class="font-semibold">* Description is required.</div>
+      </div>
+    </div>
+
+    <!-- Status Field -->
+    <div class="mb-4">
+      <label class="block text-md text-purple-600 font-medium">Status:</label>
+
+      <!-- Radio Button for 'Start' -->
+      <div class="flex items-center space-x-4 mt-2">
+        <div>
+          <input type="radio" id="start" formControlName="status" value="START" class="mr-2" [disabled]="taskForm.get('status')?.value !== null"/>
+          <label for="start" class="text-md text-purple-600 font-medium">Start</label>
+        </div>
+      </div>
+
+      <!-- Validation Error -->
+      <div *ngIf="taskForm.get('status')?.errors && (taskForm.get('status')?.dirty || taskForm.get('status')?.touched)" class="text-[12px] text-red-600 mt-1">
+        <div *ngIf="taskForm.get('status')?.errors?.['required']" class="font-semibold">* Status is required.</div>
+      </div>
+    </div>
+
+    <!-- Due Date Field -->
+    <div class="mb-6">
+      <label for="dueDate" class="block text-md text-purple-600 font-medium">Due Date:</label>
+      <input type="date" id="dueDate" formControlName="dueDate" class="w-full p-3 mt-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-500" />
+      <div *ngIf="taskForm.get('dueDate')?.errors && (taskForm.get('dueDate')?.dirty || taskForm.get('dueDate')?.touched)" class="text-[12px] text-red-600 mt-1">
+        <div *ngIf="taskForm.get('dueDate')?.errors?.['required']" class="font-semibold">* Due date is required.</div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-center mt-6">
+      <button type="submit" [disabled]="taskForm.invalid" class="w-full py-3 px-4 bg-purple-600 text-white rounded-md font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 disabled:bg-gray-400">
+        Create Task
+      </button>
+    </div>
+  </form>
+</div>

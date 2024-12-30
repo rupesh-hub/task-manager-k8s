@@ -16,3 +16,10 @@ export interface TaskResponse {
   createdBy: string;
   updatedBy?: string;
 }
+
+export interface TaskRequest {
+  title: string;
+  description: string;
+  status: 'START' | 'PROCESSING' | 'COMPLETED' | 'CANCELLED';
+  dueDate: string;
+}
