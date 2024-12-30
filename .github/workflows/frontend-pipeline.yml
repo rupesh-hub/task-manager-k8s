@@ -1,0 +1,63 @@
+name: TASK MANAGER FRONTEND PIPELINE
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - frontend/**
+      - docker/frontend/**
+      - 'docker-compose.yml'
+      - .github/workflows/frontend-*.yml
+
+jobs:
+  build-image:
+    runs-on: self-hosted
+    name: Build frontend docker image
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract project version
+        id: project-version
+        run: |
+          cd frontend
+          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+
+      - name: Login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push image to dockerhub
+        uses: docker/build-push-action@v5
+        with:
+          context: frontend
+          file: docker/frontend/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ secrets.DOCKER_USERNAME }}/task-manager-frontend:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKER_USERNAME }}/task-manager-frontend:latest
+
+  deploy:
+    name: Deploy frontend
+    runs-on: self-hosted
+    needs: [build-image]
+    steps:
+      - name: Create deployment folder
+        run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+
+      - name: Copy compose file
+        run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+
+      - name: Set ENV variable and deploy
+        run: |
+               ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
+               cd ci-cd
+               docker-compose -f docker-compose.yml pull -q
+               docker-compose -f docker-compose.yml up -d
+               EOF
+
+
+# sudo apt-get install jq

@@ -31,8 +31,8 @@ public class CustomSecurityConfiguration {
     private final JwtAuthenticationFilter customAuthenticationFilter;
 
     private static final String[] PUBLIC_URLS = new String[]{
-            "/authentication/authenticate",
-            "/authentication/register",
+            "/tests",
+            "/authentication/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",

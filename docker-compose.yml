@@ -1,0 +1,52 @@
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: task_manager_db
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - custom-network
+    restart: unless-stopped
+
+  task-manager:
+    container_name: task-manager
+    image: rupesh1997/task-manager:1.0.0
+    ports:
+      - 8181:8181
+    volumes:
+      - task-manager-storage:/app/uploads
+    networks:
+      - custom-network
+    depends_on:
+      - postgres
+
+  task-manager-frontend-service:
+    container_name: frontend-service
+    image: rupesh1997/task-manager-frontend-service:1.0.0
+    ports:
+      - 8080:80
+    networks:
+      - custom-network
+    depends_on:
+      - task-manager
+
+networks:
+  custom-network:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
+  task-manager-storage:
+    driver: local
+
+
+#docker-compose -f docker/docker-compose.yml up -d

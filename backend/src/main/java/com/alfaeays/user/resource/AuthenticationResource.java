@@ -19,18 +19,18 @@ public class AuthenticationResource {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/sign-in")
     public ResponseEntity<GlobalResponse<?>> authenticate(@RequestBody @Valid AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<GlobalResponse<?>> register(@RequestBody @Valid RegistrationRequest request) {
         return new ResponseEntity<>(authenticationService.register(request), HttpStatus.OK);
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/sign-out")
     public ResponseEntity<GlobalResponse<?>> logout(Authentication authentication) {
         authenticationService.logout((User) authentication.getPrincipal());
         return ResponseEntity.ok(GlobalResponse.success("Logged out successfully."));
