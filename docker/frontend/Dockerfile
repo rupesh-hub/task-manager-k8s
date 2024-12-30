@@ -2,16 +2,16 @@ FROM node:20 as build-stage
 
 WORKDIR /app
 
-COPY ../../frontend/package*.json ./
+COPY package*.json ./
 RUN npm install
 
-COPY ../../frontend/ .
+COPY . .
 RUN npm run build
 
 FROM nginx:alpine
 
 # Copy custom Nginx configuration
-COPY ../../frontend/nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Remove the default configuration
 RUN rm /etc/nginx/conf.d/default.conf

@@ -18,7 +18,7 @@ services:
 
   task-manager:
     container_name: task-manager
-    image: rupesh1997/task-manager:1.0.0
+    image: rupesh1997/task-manager-backend:1.0.0
     ports:
       - 8181:8181
     volumes:
@@ -30,7 +30,7 @@ services:
 
   task-manager-frontend-service:
     container_name: frontend-service
-    image: rupesh1997/task-manager-frontend-service:1.0.0
+    image: rupesh1997/task-manager-frontend:1.0.0
     ports:
       - 8080:80
     networks:
