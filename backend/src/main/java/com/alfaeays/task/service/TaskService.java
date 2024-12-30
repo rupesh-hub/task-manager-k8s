@@ -67,7 +67,7 @@ public class TaskService implements ITaskService {
             throw new IllegalStateException("Error deleting task.");
         }
         taskRepository.delete(task);
-        return GlobalResponse.success(format("Task deleted success. [%s]", taskId), null);
+        return GlobalResponse.success(format("Task [%s] deleted success.", taskId), null);
     }
 
     @Override
