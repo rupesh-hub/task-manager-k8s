@@ -1,6 +1,6 @@
 application:
   cors:
-    origins: http://localhost:4200,http://localhost:8080
+    origins: http://localhost:4200,http://localhost:8080,http://20.55.25.220:8080,http://20.55.25.220:8181
   security:
     token:
       expires_in: 86400000
