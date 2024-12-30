@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  API_URL: '/api/v1.0.0'
+  production: true,
+  API_URL: 'http://20.55.25.220:8080/api/v1.0.0',
 };

@@ -66,6 +66,8 @@ public class AuthenticationService {
             return GlobalResponse.success(
                     AuthenticationResponse
                             .builder()
+                            .name(user.fullName())
+                            .profile(user.getProfile())
                             .email(user.getUsername())
                             .email(user.getEmail())
                             .token(token)
